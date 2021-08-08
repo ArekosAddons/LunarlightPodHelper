@@ -1,0 +1,22 @@
+name: Package Release
+
+on:
+  push:
+    tags:
+        - '[0-9]+.[0-9]+.[0-9]+'
+
+env:
+  GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 16
+      - uses: kemayo/actions-recent-changelog@v1
+        with:
+          input: CHANGELOG.md
+          output: RECENT_CHANGES.md
+      - uses: BigWigsMods/packager@master
