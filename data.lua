@@ -6,7 +6,8 @@ ns.ARDENWEALD_UIMAPID = 1565
 ns.PODS = {
     LARGE = "large",
     DREAMSHRINE = "Dreamshrine",
-    GLITTERFALL_HEIGHTS = "Glitterfall Heights"
+    GLITTERFALL_HEIGHTS_EAST = "Glitterfall Heights (East)",
+    GARDEN_OF_NIGHT = "Garden of Night",
 }
 
 ns.POD_DATA = {}
@@ -15,8 +16,9 @@ ns.ACTIVE_PODS = {
     -- ["objectID"] = ns.PODS.NAME,
     ["356821"] = ns.PODS.LARGE,
 
-    ["353772"] = ns.PODS.GLITTERFALL_HEIGHTS,
+    ["353772"] = ns.PODS.GLITTERFALL_HEIGHTS_EAST,
     ["353773"] = ns.PODS.DREAMSHRINE,
+    ["353770"] = ns.PODS.GARDEN_OF_NIGHT,
 }
 
 -- Missing Lunarpods objectIDs
@@ -27,8 +29,10 @@ ns.ACTIVE_PODS = {
 ns.FINISHED_PODS = {
     -- ["objectID"] = ns.PODS.NAME,
     ["356820"] = ns.PODS.LARGE,
-    ["353685"] = ns.PODS.GLITTERFALL_HEIGHTS,
+
+    ["353685"] = ns.PODS.GLITTERFALL_HEIGHTS_EAST,
     ["353686"] = ns.PODS.DREAMSHRINE,
+    ["353683"] = ns.PODS.GARDEN_OF_NIGHT,
 }
 
 local SET = {
@@ -105,7 +109,7 @@ local DREAMSHRINE_QUEST_POSITIONS = {
 ns.POD_DATA[ns.PODS.DREAMSHRINE] = DREAMSHRINE_QUEST_POSITIONS
 
 -- Glitterfall Heights
-local GLITTERFALL_HEIGHTS_QUEST_POSITIONS = {
+local GLITTERFALL_HEIGHTS_EAST_QUEST_POSITIONS = {
     [60815] = {
         [55683962] = SET.ONE,
     },
@@ -122,6 +126,24 @@ local GLITTERFALL_HEIGHTS_QUEST_POSITIONS = {
         [55173918] = SET.ONE,
     },
 }
-ns.POD_DATA[ns.PODS.GLITTERFALL_HEIGHTS] = GLITTERFALL_HEIGHTS_QUEST_POSITIONS
+ns.POD_DATA[ns.PODS.GLITTERFALL_HEIGHTS_EAST] = GLITTERFALL_HEIGHTS_EAST_QUEST_POSITIONS
 
 -- TODO: add missing pod, waiting for them to show up
+local GARDEN_OF_NIGHT_QUEST_POSITIONS = {
+    [60805] = {
+        [39665351] = SET.ONE,
+    },
+    [60806] = {
+        [38855363] = SET.ONE,
+    },
+    [60807] = {
+        [39185366] = SET.ONE,
+    },
+    [60808] = {
+        [39485444] = SET.ONE,
+    },
+    [60809] = {
+        [38795424] = SET.ONE,
+    },
+}
+ns.PODS[ns.PODS.GARDEN_OF_NIGHT] = GARDEN_OF_NIGHT_QUEST_POSITIONS
