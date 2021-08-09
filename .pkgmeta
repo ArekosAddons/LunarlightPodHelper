@@ -1,0 +1,12 @@
+
+externals:
+  Libs/LibStub: https://repos.wowace.com/wow/libstub/trunk
+  Libs/HereBeDragons: https://github.com/Nevcairiel/HereBeDragons.git
+
+manual-changelog:
+  filename: RECENT_CHANGES.md
+  markup-type: markdown
+
+ignore:
+  - CHANGELOG.md
+  - LunarlightPodHelper.toc

@@ -1,0 +1,23 @@
+## Interface: 90100
+## Title: Lunarlight Pod: Helper
+## Notes: Helps finding unlit Lunarlight Pods
+## Version: 0.0.1
+
+## Author: Areko
+## SavedVariables: LunarlightPodHelperDB
+#@do-not-package@
+## Dependencies: Ace3, HereBeDragons
+#@end-do-not-package@
+#@non-debug@
+# ## OptionalDeps: LibStub, CallbackHandler-1.0, Ace3, HereBeDragons
+
+# Libs/LibStub/LibStub.lua
+# Libs/HereBeDragons/HereBeDragons-2.0.lua
+# Libs/HereBeDragons/HereBeDragons-Pins-2.0.lua
+#@end-non-debug@
+
+
+data.lua
+core.lua
+map.lua
+icons.lua
