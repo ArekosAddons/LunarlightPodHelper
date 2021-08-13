@@ -110,7 +110,7 @@ local add_pin, remove_pin, remove_all_pins do
 end
 
 local check_quests do
-    local NEAR_DISTANCE = 2.5 / 10000
+    local NEAR_DISTANCE = 4.1 / 10000
 
     function check_quests()
         local unregister = true
@@ -205,7 +205,7 @@ local function enable_tracking(pod)
     end
 
     if not tickerHandle then
-        tickerHandle = C_Timer.NewTicker(0.3, check_quests)
+        tickerHandle = C_Timer.NewTicker(0.25, check_quests)
     end
 end
 

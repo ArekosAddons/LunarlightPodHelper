@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [unreleased] - ~
 ### Fixed
  - Garden of Night displays know Minimap icons
+### Changed
+ - Make Pod detection for Large Lunarpod more fuzzy
 
 ## [0.1.2] - 2021-09-10
 ### Fixed
