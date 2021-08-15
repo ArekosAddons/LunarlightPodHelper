@@ -148,7 +148,8 @@ local check_quests do
                                 count = count + 1
                             end
                             if count == 1 then
-                                state.activeSet = next(sets)
+                                local id = next(sets)
+                                state.activeSet = id or true
                             end
                             if count > 0 then
                                 for _, _data in pairs(state.positions) do
