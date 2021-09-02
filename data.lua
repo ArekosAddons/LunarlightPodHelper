@@ -7,6 +7,7 @@ ns.PODS = {
     LARGE = "large",
     DREAMSHRINE = "Dreamshrine",
     GLITTERFALL_HEIGHTS_EAST = "Glitterfall Heights (East)",
+    GLITTERFALL_HEIGHTS_WEST = "Glitterfall Heights (West)",
     GARDEN_OF_NIGHT = "Garden of Night",
 }
 
@@ -17,20 +18,20 @@ ns.ACTIVE_PODS = {
     ["356821"] = ns.PODS.LARGE,
 
     ["353772"] = ns.PODS.GLITTERFALL_HEIGHTS_EAST,
+    ["353771"] = ns.PODS.GLITTERFALL_HEIGHTS_WEST,
     ["353773"] = ns.PODS.DREAMSHRINE,
     ["353770"] = ns.PODS.GARDEN_OF_NIGHT,
 }
 
 -- Missing Lunarpods objectIDs
 -- 48.0 71.2 : 353769 => 353681
--- 39.2 54.5 : 353770 => 353683
--- 48.2 34.9 : 353771 => 353684
 
 ns.FINISHED_PODS = {
     -- ["objectID"] = ns.PODS.NAME,
     ["356820"] = ns.PODS.LARGE,
 
     ["353685"] = ns.PODS.GLITTERFALL_HEIGHTS_EAST,
+    ["353684"] = ns.PODS.GLITTERFALL_HEIGHTS_WEST,
     ["353686"] = ns.PODS.DREAMSHRINE,
     ["353683"] = ns.PODS.GARDEN_OF_NIGHT,
 }
@@ -122,7 +123,25 @@ local GLITTERFALL_HEIGHTS_EAST_QUEST_POSITIONS = {
 }
 ns.POD_DATA[ns.PODS.GLITTERFALL_HEIGHTS_EAST] = GLITTERFALL_HEIGHTS_EAST_QUEST_POSITIONS
 
--- TODO: add missing pod, waiting for them to show up
+local GLITTERFALL_HEIGHTS_WEST_QUEST_POSITIONS = {
+    [60810] = {
+        [48123582] = true,
+    },
+    [60811] = {
+        [47643433] = true,
+    },
+    [60812] = {
+        [48283372] = true,
+    },
+    [60813] = {
+        [48963447] = true,
+    },
+    [60814] = {
+        [48503463] = true,
+    },
+}
+ns.POD_DATA[ns.PODS.GLITTERFALL_HEIGHTS_WEST] = GLITTERFALL_HEIGHTS_WEST_QUEST_POSITIONS
+
 local GARDEN_OF_NIGHT_QUEST_POSITIONS = {
     [60805] = {
         [39665351] = SET.ONE,
