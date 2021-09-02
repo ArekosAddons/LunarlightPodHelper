@@ -14,10 +14,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 16
+          fetch-depth: 0
           lfs: true
-      # - uses: kemayo/actions-recent-changelog@v1
-      #   with:
-      #     input: CHANGELOG.md
-      #     output: RECENT_CHANGES.md
+      - uses: kemayo/actions-recent-changelog@v1
+        with:
+          input: CHANGELOG.md
+          output: RECENT_CHANGES.md
       - uses: BigWigsMods/packager@master
