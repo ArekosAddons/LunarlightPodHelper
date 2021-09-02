@@ -1,5 +1,6 @@
 local ADDONNAME, ns = ...
 
+local L = LibStub("AceLocale-3.0"):GetLocale(ADDONNAME)
 
 local C_QuestLog = C_QuestLog
 
@@ -161,9 +162,14 @@ local check_quests do
                                     end
                                 end
                             else
+                                --@debug@
                                 DEFAULT_CHAT_FRAME:AddMessage(string.format("%s: Unknown Lunarpod position:", ADDONNAME))
                                 DEFAULT_CHAT_FRAME:AddMessage(
                                     string.format("    Quest: %d, [%d%d] = SET.?", questID, ppX*10000, ppY*10000)
+                                )
+                                --@end-debug@
+                                DEFAULT_CHAT_FRAME:AddMessage(
+                                    string.format(L.NO_POSITION_FOUND_S, ADDONNAME)
                                 )
                             end
                         end
