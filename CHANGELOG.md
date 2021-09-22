@@ -14,7 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
  - Remove debug print for fast moving/unknown position, instead inform to stand still on the first Lunarpod for a second
 
-
 ## [0.1.4] - 2021-08-17
 ### Fixed
  - Remove duplicated Lunarpod positions
