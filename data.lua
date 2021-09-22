@@ -9,6 +9,7 @@ ns.PODS = {
     GLITTERFALL_HEIGHTS_EAST = "Glitterfall Heights (East)",
     GLITTERFALL_HEIGHTS_WEST = "Glitterfall Heights (West)",
     GARDEN_OF_NIGHT = "Garden of Night",
+    EVENTIDE_GROVE = "Eventide Grove",
 }
 
 ns.POD_DATA = {}
@@ -17,23 +18,22 @@ ns.ACTIVE_PODS = {
     -- ["objectID"] = ns.PODS.NAME,
     ["356821"] = ns.PODS.LARGE,
 
-    ["353772"] = ns.PODS.GLITTERFALL_HEIGHTS_EAST,
-    ["353771"] = ns.PODS.GLITTERFALL_HEIGHTS_WEST,
-    ["353773"] = ns.PODS.DREAMSHRINE,
+    ["353769"] = ns.PODS.EVENTIDE_GROVE,
     ["353770"] = ns.PODS.GARDEN_OF_NIGHT,
+    ["353771"] = ns.PODS.GLITTERFALL_HEIGHTS_WEST,
+    ["353772"] = ns.PODS.GLITTERFALL_HEIGHTS_EAST,
+    ["353773"] = ns.PODS.DREAMSHRINE,
 }
-
--- Missing Lunarpods objectIDs
--- 48.0 71.2 : 353769 => 353681
 
 ns.FINISHED_PODS = {
     -- ["objectID"] = ns.PODS.NAME,
     ["356820"] = ns.PODS.LARGE,
 
-    ["353685"] = ns.PODS.GLITTERFALL_HEIGHTS_EAST,
+    ["353681"] = ns.PODS.EVENTIDE_GROVE,
+    ["353683"] = ns.PODS.GARDEN_OF_NIGHT,
     ["353684"] = ns.PODS.GLITTERFALL_HEIGHTS_WEST,
     ["353686"] = ns.PODS.DREAMSHRINE,
-    ["353683"] = ns.PODS.GARDEN_OF_NIGHT,
+    ["353685"] = ns.PODS.GLITTERFALL_HEIGHTS_EAST,
 }
 
 local SET = {
@@ -160,3 +160,23 @@ local GARDEN_OF_NIGHT_QUEST_POSITIONS = {
     },
 }
 ns.POD_DATA[ns.PODS.GARDEN_OF_NIGHT] = GARDEN_OF_NIGHT_QUEST_POSITIONS
+
+-- Eventide Grove
+local EVENTIDE_GROVE_QUEST_POSITIONS = {
+    [60800] = {
+        [47787097] = SET.ONE,
+    },
+    [60801] = {
+        [48307120] = SET.ONE,
+    },
+    [60802] = {
+        [48307152] = SET.ONE,
+    },
+    [60803] = {
+        [48027019] = SET.ONE,
+    },
+    [60804] = {
+        [48396998] = SET.ONE,
+    },
+}
+ns.POD_DATA[ns.PODS.EVENTIDE_GROVE] = EVENTIDE_GROVE_QUEST_POSITIONS
