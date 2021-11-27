@@ -1,4 +1,4 @@
-## Interface: 90100
+## Interface: 90105
 ## Title: Lunarlight Pod: Helper
 ## Notes: Helps finding unlit Lunarlight Pods
 ## Version: 0.1.7
