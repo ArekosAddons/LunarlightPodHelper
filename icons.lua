@@ -3,21 +3,21 @@ local ADDONNAME, ns = ...
 local L = LibStub("AceLocale-3.0"):GetLocale(ADDONNAME)
 
 local C_QuestLog = C_QuestLog
+local C_Timer = C_Timer
 
 local Pins = LibStub("HereBeDragons-Pins-2.0")
 
-local ARDENWEALD_UIMAPID = ns.ARDENWEALD_UIMAPID
 local PINS_REF = ADDONNAME .. "Pins"
-local ICON do
+local ICON_FALLBACK do
     local ICON_PATH = "Interface/AddOns/" .. ADDONNAME .. "/icons/minimap_icon.blp"
-    ICON = GetFileIDFromPath(ICON_PATH) or ICON_PATH
+    ICON_FALLBACK = GetFileIDFromPath(ICON_PATH) or ICON_PATH
 end
 
 -- luacheck: ignore 11[1-3]/LunarlightPodHelperDB
 LunarlightPodHelperDB = LunarlightPodHelperDB or { ts = 0 }
 
 
-local podStates = {}
+local treasureStates = {}
 local tickerHandle = nil
 
 local posPaar2XY = setmetatable({}, {__index = function(t, posPaar)
@@ -30,20 +30,23 @@ local posPaar2XY = setmetatable({}, {__index = function(t, posPaar)
 end})
 
 
-local function setup_state(pod)
-    local data = ns.POD_DATA[pod]
+local function setup_state(treasure)
+    local data = ns.TREASURE_DATA[treasure]
 
     if data then
         local state =  {
             activeSet = nil,
+            mapID = ns.TREASURE_MAP[treasure] or C_Map.GetBestMapForUnit("player") or nil,
+            iconID = ns.TREASURE_ICON[treasure] or ICON_FALLBACK,
             positions = {},
         }
-        podStates[pod] = state
+        treasureStates[treasure] = state
 
         local activeSet = nil
 
+        local isQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
         for questID, positions in pairs(data) do
-            if not C_QuestLog.IsQuestFlaggedCompleted(questID) then
+            if not isQuestFlaggedCompleted(questID) then
                 local quest_pos = {}
                 state.positions[questID] = quest_pos
 
@@ -75,8 +78,8 @@ local add_pin, remove_pin, remove_all_pins do
     local framePool = CreateFramePool("Frame")
     local activePins = {}
 
-    function add_pin(posPaar)
-        if activePins[posPaar] then return end
+    function add_pin(mapID, posPaar, iconID)
+        if activePins[mapID .. posPaar] then return end
 
         local icon, new = framePool:Acquire()
         if new then
@@ -84,21 +87,21 @@ local add_pin, remove_pin, remove_all_pins do
             -- "ARTWORK" "OVERLAY"
             local texture = icon:CreateTexture(nil, "ARTWORK")
             texture:SetAllPoints()
-            texture:SetTexture(ICON)
 
             icon.texture = texture
         end
-        activePins[posPaar] = icon
+        icon.texture:SetTexture(iconID)
+        activePins[mapID .. posPaar] = icon
 
         local x, y = unpack(posPaar2XY[posPaar])
-        Pins:AddMinimapIconMap(PINS_REF, icon, ARDENWEALD_UIMAPID, x, y, false, true)
+        Pins:AddMinimapIconMap(PINS_REF, icon, mapID, x, y, false, true)
     end
 
-    function remove_pin(posPaar)
-        local icon = activePins[posPaar]
+    function remove_pin(mapID, posPaar)
+        local icon = activePins[mapID .. posPaar]
         if not icon then return end
 
-        activePins[posPaar] = nil
+        activePins[mapID .. posPaar] = nil
         Pins:RemoveMinimapIcon(PINS_REF, icon)
         framePool:Release(icon)
     end
@@ -114,21 +117,23 @@ local check_quests do
     local NEAR_DISTANCE = 4.1 / 10000
 
     function check_quests()
+        local isQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
         local unregister = true
 
         local playerPosition = nil
         local ppX, ppY
-        for _, state in pairs(podStates) do
+        for _, state in pairs(treasureStates) do
             if state.active then
+                local mapID = state.mapID or C_Map.GetBestMapForUnit("player")
                 unregister = false
 
                 if not state.activeSet and not playerPosition then
-                    playerPosition = C_Map.GetPlayerMapPosition(ARDENWEALD_UIMAPID, "player")
+                    playerPosition = C_Map.GetPlayerMapPosition(mapID, "player")
                     ppX, ppY = playerPosition:GetXY()
                 end
 
                 for questID, data in pairs(state.positions) do
-                    if C_QuestLog.IsQuestFlaggedCompleted(questID) then
+                    if isQuestFlaggedCompleted(questID) then
                         if not state.activeSet then
                             local sets = {}
 
@@ -156,14 +161,14 @@ local check_quests do
                                 for _, _data in pairs(state.positions) do
                                     for posPaar, setID in pairs(_data) do
                                         if not sets[setID] then
-                                            remove_pin(posPaar)
+                                            remove_pin(mapID, posPaar)
                                             _data[posPaar] = nil
                                         end
                                     end
                                 end
                             else
                                 --@debug@
-                                DEFAULT_CHAT_FRAME:AddMessage(string.format("%s: Unknown Lunarpod position:", ADDONNAME))
+                                DEFAULT_CHAT_FRAME:AddMessage(string.format("%s: Unknown treasure position:", ADDONNAME))
                                 DEFAULT_CHAT_FRAME:AddMessage(
                                     string.format("    Quest: %d, [%d%d] = SET.?", questID, ppX*10000, ppY*10000)
                                 )
@@ -175,7 +180,7 @@ local check_quests do
                         end
 
                         for posPaar in pairs(data) do
-                            remove_pin(posPaar)
+                            remove_pin(mapID, posPaar)
                         end
                         state.positions[questID] = nil
                     end
@@ -197,17 +202,19 @@ local check_quests do
     end
 end
 
-local function enable_tracking(pod)
-    if not podStates[pod] then
-        if not setup_state(pod) then return end
+local function enable_tracking(treasure)
+    if not treasureStates[treasure] then
+        if not setup_state(treasure) then return end
     end
 
-    local state = podStates[pod]
+    local state = treasureStates[treasure]
     state.active = true
 
+    local mapID = state.mapID or 0
+    local iconID = state.iconID
     for _, data in pairs(state.positions) do
         for posPaar in pairs(data) do
-            add_pin(posPaar)
+            add_pin(mapID, posPaar, iconID)
         end
     end
 
@@ -216,25 +223,26 @@ local function enable_tracking(pod)
     end
 end
 
-local function disable_tracking(pod)
-    local state = podStates[pod]
+local function disable_tracking(treasure)
+    local state = treasureStates[treasure]
 
     if state then
         -- ticker will auto cancel with no active states
         state.active = false
+        local mapID = state.mapID or 0
 
         for posPaar in pairs(state.positions) do
-            remove_pin(posPaar)
+            remove_pin(mapID, posPaar)
         end
     end
 end
 
-ns.OnCallback.ENTERED_LUNARPOD_ZONE = function(event, pod)
-    enable_tracking(pod)
+ns.OnCallback.ENTERED_TREASURE_ZONE = function(event, treasure)
+    enable_tracking(treasure)
 end
 
-ns.OnCallback.LEAVED_LUNARPOD_ZONE = function(event, pod)
-    disable_tracking(pod)
+ns.OnCallback.LEAVED_TREASURE_ZONE = function(event, treasure)
+    disable_tracking(treasure)
 end
 
 ns.OnEvent.ADDON_LOADED = function(event, arg1)
@@ -242,16 +250,16 @@ ns.OnEvent.ADDON_LOADED = function(event, arg1)
 
     local ts = GetServerTime() - 60 * 15 -- 15 minutes in the past
     if LunarlightPodHelperDB.ts >= ts then
-        local dbPodState = LunarlightPodHelperDB.podStates
+        local dbTreasureState = LunarlightPodHelperDB.treasureStates
 
-        if dbPodState then
-            for pod, state in pairs(dbPodState) do
-                podStates[pod] = state
+        if dbTreasureState then
+            for pod, state in pairs(dbTreasureState) do
+                treasureStates[pod] = state
             end
         end
-
-        LunarlightPodHelperDB.podStates = nil
     end
+    LunarlightPodHelperDB.podStates = nil -- NOTE: remove me on a later release
+    LunarlightPodHelperDB.treasureStates = treasureStates
 
     return true
 end
@@ -260,11 +268,11 @@ ns.OnEvent.PLAYER_LOGOUT = function(event)
     LunarlightPodHelperDB.ts = GetServerTime()
 
     -- clear finished/empty states
-    for pod, state in pairs(podStates) do
+    for treasure, state in pairs(treasureStates) do
         if not next(state.positions) then
-            podStates[pod] = nil
+            treasureStates[treasure] = nil
         end
     end
-    LunarlightPodHelperDB.podStates = podStates
+    LunarlightPodHelperDB.treasureStates = treasureStates
 end
 

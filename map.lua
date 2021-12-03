@@ -1,23 +1,20 @@
 local ADDONNAME, ns = ...
 
 
-local ARDENWEALD_UIMAPID = ns.ARDENWEALD_UIMAPID
-
-
 local cancel_VIGNETTE_MINIMAP_UPDATED = false
 local VIGNETTE_MINIMAP_UPDATED do
-    local podsInRage = {}
+    local treasuresInRage = {}
 
-    local inside = function(pod)
-        if not podsInRage[pod] then
-            podsInRage[pod] = true
-            ns.OnCallback.ENTERED_LUNARPOD_ZONE(pod)
+    local inside = function(treasure)
+        if not treasuresInRage[treasure] then
+            treasuresInRage[treasure] = true
+            ns.OnCallback.ENTERED_TREASURE_ZONE(treasure)
         end
     end
-    local outside = function(pod)
-        if podsInRage[pod] then
-            podsInRage[pod] = false
-            ns.OnCallback.LEAVED_LUNARPOD_ZONE(pod)
+    local outside = function(treasure)
+        if treasuresInRage[treasure] then
+            treasuresInRage[treasure] = false
+            ns.OnCallback.LEAVED_TREASURE_ZONE(treasure)
         end
     end
 
@@ -31,17 +28,17 @@ local VIGNETTE_MINIMAP_UPDATED do
         if vignetteInfo and vignetteInfo.objectGUID then
             local _, _, _, _, _, objectID = string.split("-", vignetteInfo.objectGUID)
 
-            local pod = ns.ACTIVE_PODS[objectID]
-            if pod then
+            local treasure = ns.ACTIVE_TREASURES[objectID]
+            if treasure then
                 if vignetteInfo.onMinimap then
-                    inside(pod)
+                    inside(treasure)
                 else
-                    outside(pod)
+                    outside(treasure)
                 end
             else
-                pod = ns.FINISHED_PODS[objectID]
-                if pod then
-                    outside(pod)
+                treasure = ns.FINISHED_TREASURES[objectID]
+                if treasure then
+                    outside(treasure)
                 end
             end
         end
@@ -49,17 +46,25 @@ local VIGNETTE_MINIMAP_UPDATED do
 end
 
 
-local in_ardenweald do
+local in_MOI do
+    local MOI = {
+        [0] = false,
+        [ns.ARDENWEALD_UIMAPID] = true,
+    }
     local cache = {}
 
-    in_ardenweald  = function()
-        local currentMapID = C_Map.GetBestMapForUnit("player")
-        if currentMapID == ARDENWEALD_UIMAPID then
-            return true
-        end
+    in_MOI  = function()
+        local currentMapID = C_Map.GetBestMapForUnit("player") or 0
+        do
+            local result = MOI[currentMapID]
+            if result ~= nil then
+                return result
+            end
 
-        if cache[currentMapID] ~= nil then
-            return cache[currentMapID]
+            result = cache[currentMapID]
+            if result ~= nil then
+                return result
+            end
         end
 
         local mapID = currentMapID
@@ -67,7 +72,7 @@ local in_ardenweald do
             local info = C_Map.GetMapInfo(mapID)
             if info and info.parentMapID ~= 0 then
                 mapID = info.parentMapID
-                if mapID == ARDENWEALD_UIMAPID then
+                if MOI[mapID] then
                     cache[currentMapID] = true
                     return true
                 end
@@ -80,12 +85,12 @@ local in_ardenweald do
 end
 
 ns.OnEvent.ZONE_CHANGED_NEW_AREA = function(event)
-    if in_ardenweald() then
+    if in_MOI() then
         cancel_VIGNETTE_MINIMAP_UPDATED = false
         ns.OnEvent.VIGNETTE_MINIMAP_UPDATED = VIGNETTE_MINIMAP_UPDATED
         -- if already registered, will simple overwrite it self
 
-        -- VIGNETTE_MINIMAP_UPDATED does not trigger for already existing vignettes
+        -- call VIGNETTE_MINIMAP_UPDATED for already existing vignettes
         for _, vignetteGUID in pairs(C_VignetteInfo.GetVignettes()) do
             local vignetteInfo = C_VignetteInfo.GetVignetteInfo(vignetteGUID)
             if vignetteInfo then
