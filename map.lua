@@ -84,7 +84,15 @@ local in_MOI do
     end
 end
 
+local PLAYER_CONTROL_GAINED = function(event)
+    ns.OnEvent("ZONE_CHANGED_NEW_AREA")
+    return true
+end
+
 ns.OnEvent.ZONE_CHANGED_NEW_AREA = function(event)
+    if UnitOnTaxi("player") then
+        ns.OnEvent.PLAYER_CONTROL_GAINED = PLAYER_CONTROL_GAINED
+    end
     if in_MOI() then
         cancel_VIGNETTE_MINIMAP_UPDATED = false
         ns.OnEvent.VIGNETTE_MINIMAP_UPDATED = VIGNETTE_MINIMAP_UPDATED
