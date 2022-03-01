@@ -50,6 +50,7 @@ local in_MOI do
     local MOI = {
         [0] = false,
         [ns.ARDENWEALD_UIMAPID] = true,
+        [ns.MALDRAXXUS_UIMAPID] = true,
     }
     local cache = {}
 

@@ -1,7 +1,7 @@
 local ADDONNAME, ns = ...
 
-
 ns.ARDENWEALD_UIMAPID = 1565
+ns.MALDRAXXUS_UIMAPID = 1536
 
 ns.TREASURES = {
     -- Ardenweald: Lunarpods
@@ -11,6 +11,11 @@ ns.TREASURES = {
     GLITTERFALL_HEIGHTS_WEST = "Glitterfall Heights (West)",
     GARDEN_OF_NIGHT = "Garden of Night",
     EVENTIDE_GROVE = "Eventide Grove",
+
+    -- Maldraxxus: Runecoffers
+    CHOSEN = "chosen",
+    HOUSE_OF_CONSTRUCTS = "House of Constructs",
+    HOUSE_OF_RITUALS = "House of Rituals",
 }
 ns.PODS = {
     LARGE = "large",
@@ -28,11 +33,19 @@ ns.TREASURE_MAP = {
     [ns.TREASURES.GLITTERFALL_HEIGHTS_WEST] = ns.ARDENWEALD_UIMAPID,
     [ns.TREASURES.GARDEN_OF_NIGHT] = ns.ARDENWEALD_UIMAPID,
     [ns.TREASURES.EVENTIDE_GROVE] = ns.ARDENWEALD_UIMAPID,
+
+    [ns.TREASURES.CHOSEN] = ns.MALDRAXXUS_UIMAPID,
+    [ns.TREASURES.HOUSE_OF_CONSTRUCTS] = ns.MALDRAXXUS_UIMAPID,
+    [ns.TREASURES.HOUSE_OF_RITUALS] = ns.MALDRAXXUS_UIMAPID,
 }
 
 local ARDENWEALD_ICON do
     local ICON_PATH = "Interface/AddOns/" .. ADDONNAME .. "/icons/minimap_icon_ardenweald.blp"
     ARDENWEALD_ICON = GetFileIDFromPath(ICON_PATH) or ICON_PATH
+end
+local MALDRAXXUS_ICON do
+    local ICON_PATH = "Interface/AddOns/" .. ADDONNAME .. "/icons/minimap_icon_maldraxxus.blp"
+    MALDRAXXUS_ICON = GetFileIDFromPath(ICON_PATH) or ICON_PATH
 end
 ns.TREASURE_ICON = {
     [ns.TREASURES.LARGE] = ARDENWEALD_ICON,
@@ -41,10 +54,57 @@ ns.TREASURE_ICON = {
     [ns.TREASURES.GLITTERFALL_HEIGHTS_WEST] = ARDENWEALD_ICON,
     [ns.TREASURES.GARDEN_OF_NIGHT] = ARDENWEALD_ICON,
     [ns.TREASURES.EVENTIDE_GROVE] = ARDENWEALD_ICON,
+
+    [ns.TREASURES.CHOSEN] = MALDRAXXUS_ICON,
+    [ns.TREASURES.HOUSE_OF_CONSTRUCTS] = MALDRAXXUS_ICON,
+    [ns.TREASURES.HOUSE_OF_RITUALS] = MALDRAXXUS_ICON,
 }
 
 ns.TREASURE_DATA = {}
 ns.POD_DATA = {}
+
+--@debug@
+function LLPH() -- luacheck: ignore 111/LLPH
+    local first = true
+    for _, vignetteGUID in pairs(C_VignetteInfo.GetVignettes()) do
+        local vignetteInfo = C_VignetteInfo.GetVignetteInfo(vignetteGUID)
+        if vignetteInfo then
+            print("Name:", vignetteInfo.name)
+            print("GUID:", vignetteInfo.vignetteGUID)
+            if vignetteInfo.objectGUID then
+                local _, _, _, _, _, objectID = string.split("-", vignetteInfo.objectGUID)
+                print(" objectGUID:", vignetteInfo.objectGUID)
+                print(" objectID:", objectID)
+            end
+            if first then
+                print(" ")
+                first = false
+            end
+        end
+    end
+end
+function LLPH_I(index) -- luacheck: ignore 111/LLPH_I
+    index = tonumber(index) or 1
+    local list = C_VignetteInfo.GetVignettes()
+    local vignetteGUID = list[index]
+    if not vignetteGUID then
+        index = 1
+        vignetteGUID = list[index]
+    end
+    local vignetteInfo = C_VignetteInfo.GetVignetteInfo(vignetteGUID)
+
+    if vignetteInfo then
+        print("[" .. index .. "] = {")
+        for key, value in pairs(vignetteInfo) do
+            -- [key] = value,
+            print(" [" .. tostring(key) .. "]" .. " = " .. tostring(value) .. ",")
+        end
+        print("}")
+    else
+        print("No vignettes")
+    end
+end
+--@end-debug@
 
 ns.ACTIVE_TREASURES = {
     -- Ardenweald: Lunarpods
@@ -55,6 +115,11 @@ ns.ACTIVE_TREASURES = {
     ["353771"] = ns.TREASURES.GLITTERFALL_HEIGHTS_WEST,
     ["353772"] = ns.TREASURES.GLITTERFALL_HEIGHTS_EAST,
     ["353773"] = ns.TREASURES.DREAMSHRINE,
+
+    -- Maldraxxus: Runecoffers
+    ["356759"] = ns.TREASURES.CHOSEN,
+    ["355037"] = ns.TREASURES.HOUSE_OF_CONSTRUCTS,
+    ["355038"] = ns.TREASURES.HOUSE_OF_RITUALS,
 }
 ns.ACTIVE_PODS = {
     -- ["objectID"] = ns.PODS.NAME,
@@ -76,6 +141,11 @@ ns.FINISHED_TREASURES = {
     ["353684"] = ns.TREASURES.GLITTERFALL_HEIGHTS_WEST,
     ["353686"] = ns.TREASURES.DREAMSHRINE,
     ["353685"] = ns.TREASURES.GLITTERFALL_HEIGHTS_EAST,
+
+    -- Maldraxxus: Runecoffers
+    ["355035"] = ns.TREASURES.CHOSEN,
+    ["364531"] = ns.TREASURES.HOUSE_OF_CONSTRUCTS,
+    ["355036"] = ns.TREASURES.HOUSE_OF_RITUALS,
 }
 ns.FINISHED_PODS = {
     -- ["objectID"] = ns.PODS.NAME,
@@ -180,19 +250,19 @@ ns.TREASURE_DATA[ns.PODS.GLITTERFALL_HEIGHTS_EAST] = GLITTERFALL_HEIGHTS_EAST_QU
 
 local GLITTERFALL_HEIGHTS_WEST_QUEST_POSITIONS = {
     [60810] = {
-        [48123582] = true,
+        [48123582] = SET.ONE,
     },
     [60811] = {
-        [47643433] = true,
+        [47643433] = SET.ONE,
     },
     [60812] = {
-        [48283372] = true,
+        [48283372] = SET.ONE,
     },
     [60813] = {
-        [48963447] = true,
+        [48963447] = SET.ONE,
     },
     [60814] = {
-        [48503463] = true,
+        [48503463] = SET.ONE,
     },
 }
 ns.POD_DATA[ns.PODS.GLITTERFALL_HEIGHTS_WEST] = GLITTERFALL_HEIGHTS_WEST_QUEST_POSITIONS
@@ -238,3 +308,62 @@ local EVENTIDE_GROVE_QUEST_POSITIONS = {
 }
 ns.POD_DATA[ns.PODS.EVENTIDE_GROVE] = EVENTIDE_GROVE_QUEST_POSITIONS
 ns.TREASURE_DATA[ns.PODS.EVENTIDE_GROVE] = EVENTIDE_GROVE_QUEST_POSITIONS
+
+-- Chosen Runecoffer
+local CHOSEN_RUNECOFFER_QUEST_POSITIONS = {
+    [61648] = {
+        [37626510] = SET.ONE,
+        [38706414] = SET.TWO,
+        [37806437] = SET.THREE,
+        [38186463] = SET.FOUR,
+    },
+    [61649] = {
+        [38936585] = SET.ONE,
+        [39806545] = SET.TWO,
+        [38096673] = SET.THREE,
+        [39606432] = SET.FOUR,
+    },
+    [61650] = {
+        [40156652] = SET.ONE,
+        [39306639] = SET.TWO,
+        [39116408] = SET.THREE,
+        [38816662] = SET.FOUR,
+    },
+}
+ns.TREASURE_DATA[ns.TREASURES.CHOSEN] = CHOSEN_RUNECOFFER_QUEST_POSITIONS
+
+-- HOUSE_OF_CONSTRUCTS
+local HOUSE_OF_CONSTRUCTS_QUEST_POSITIONS = {
+    [61120] = {
+        [31822260] = SET.ONE,
+        [32432901] = SET.TWO,
+        [26804641] = SET.THREE,
+    },
+    [61121] = {
+        [35322309] = SET.ONE,
+        [30503136] = SET.TWO,
+        [27545020] = SET.THREE,
+    },
+    [61122] = {
+        [33592224] = SET.ONE,
+        [28952836] = SET.TWO,
+        [26014796] = SET.THREE,
+    },
+}
+ns.TREASURE_DATA[ns.TREASURES.HOUSE_OF_CONSTRUCTS] = HOUSE_OF_CONSTRUCTS_QUEST_POSITIONS
+
+local HOUSE_OF_RITUALS_QUEST_POSITIONS = {
+    [61117] = {
+        [63763324] = SET.ONE,
+        [70143131] = SET.TWO,
+    },
+    [61118] = {
+        [65673461] = SET.ONE,
+        [71633525] = SET.TWO,
+    },
+    [61119] = {
+        [64843583] = SET.ONE,
+        [71603296] = SET.TWO, -- NOTE: below the carpet
+    },
+}
+ns.TREASURE_DATA[ns.TREASURES.HOUSE_OF_RITUALS] = HOUSE_OF_RITUALS_QUEST_POSITIONS
