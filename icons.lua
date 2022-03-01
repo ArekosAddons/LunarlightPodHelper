@@ -4,6 +4,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale(ADDONNAME)
 
 local C_QuestLog = C_QuestLog
 local C_Timer = C_Timer
+local math = math
 
 local Pins = LibStub("HereBeDragons-Pins-2.0")
 
@@ -22,7 +23,7 @@ local tickerHandle = nil
 
 local posPaar2XY = setmetatable({}, {__index = function(t, posPaar)
     local v = {
-        floor(posPaar / 10000) / 10000,
+        math.floor(posPaar / 10000) / 10000,
         (posPaar % 10000) / 10000,
     }
     t[posPaar] = v
@@ -168,7 +169,9 @@ local check_quests do
                                 end
                             else
                                 --@debug@
-                                DEFAULT_CHAT_FRAME:AddMessage(string.format("%s: Unknown treasure position:", ADDONNAME))
+                                DEFAULT_CHAT_FRAME:AddMessage(
+                                    string.format("%s: Unknown treasure position:", ADDONNAME)
+                                )
                                 DEFAULT_CHAT_FRAME:AddMessage(
                                     string.format("    Quest: %d, [%d%d] = SET.?", questID, ppX*10000, ppY*10000)
                                 )
