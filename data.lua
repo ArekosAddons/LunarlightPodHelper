@@ -338,16 +338,19 @@ local HOUSE_OF_CONSTRUCTS_QUEST_POSITIONS = {
         [31822260] = SET.ONE,
         [32432901] = SET.TWO,
         [26804641] = SET.THREE,
+        [24333481] = SET.FOUR,
     },
     [61121] = {
         [35322309] = SET.ONE,
         [30503136] = SET.TWO,
         [27545020] = SET.THREE,
+        [26653130] = SET.FOUR,
     },
     [61122] = {
         [33592224] = SET.ONE,
         [28952836] = SET.TWO,
         [26014796] = SET.THREE,
+        [26613837] = SET.FOUR,
     },
 }
 ns.TREASURE_DATA[ns.TREASURES.HOUSE_OF_CONSTRUCTS] = HOUSE_OF_CONSTRUCTS_QUEST_POSITIONS
