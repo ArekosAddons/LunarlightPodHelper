@@ -135,6 +135,7 @@ local SET = {
     THREE = "three",
     FOUR = "four",
     FIVE = "five",
+    SIX = "six",
 }
 
 local LARGE_LUNAR_POD_QUEST_SET_POSISTIONS = {
@@ -304,18 +305,24 @@ local HOUSE_OF_CONSTRUCTS_QUEST_POSITIONS = {
         [32432901] = SET.TWO,
         [26804641] = SET.THREE,
         [24333481] = SET.FOUR,
+        [33093612] = SET.FIVE,
+        [35493030] = SET.SIX,
     },
     [61121] = {
         [35322309] = SET.ONE,
         [30503136] = SET.TWO,
         [27545020] = SET.THREE,
         [26653130] = SET.FOUR,
+        [31343356] = SET.FIVE,
+        [35372786] = SET.SIX,
     },
     [61122] = {
         [33592224] = SET.ONE,
         [28952836] = SET.TWO,
         [26014796] = SET.THREE,
         [26613837] = SET.FOUR,
+        [29353789] = SET.FIVE,
+        [34003000] = SET.SIX,
     },
 }
 ns.TREASURE_DATA[ns.TREASURES.HOUSE_OF_CONSTRUCTS] = HOUSE_OF_CONSTRUCTS_QUEST_POSITIONS

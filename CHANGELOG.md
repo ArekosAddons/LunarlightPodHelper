@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [unreleased] - ~
+### Added
+ - Add a one more set for rune cover in House of Constructs
+
 ## [0.2.1] - 2022-03-04
 ### Fixed
  - Fix load error
