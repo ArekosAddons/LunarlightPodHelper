@@ -331,14 +331,17 @@ local HOUSE_OF_RITUALS_QUEST_POSITIONS = {
     [61117] = {
         [63763324] = SET.ONE,
         [70143131] = SET.TWO,
+        [69572843] = SET.THREE,
     },
     [61118] = {
         [65673461] = SET.ONE,
         [71633525] = SET.TWO,
+        [66722905] = SET.THREE,
     },
     [61119] = {
         [64843583] = SET.ONE,
         [71603296] = SET.TWO, -- NOTE: below the carpet
+        [68643200] = SET.THREE,
     },
 }
 ns.TREASURE_DATA[ns.TREASURES.HOUSE_OF_RITUALS] = HOUSE_OF_RITUALS_QUEST_POSITIONS

@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased] - ~
 ### Added
- - Add a one more set for rune cover in House of Constructs
+ - Add more sets for rune covers in Maldraxxus
 
 ## [0.2.1] - 2022-03-04
 ### Fixed
