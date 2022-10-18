@@ -1,10 +1,12 @@
 ## Interface: 90207
 ## Title: Lunarlight Pod: Helper
 ## Notes: Helps finding unlit Lunarlight Pods
-## Version: 0.2.3
+## Version: 0.2.4
 
 ## Author: Areko
 ## SavedVariables: LunarlightPodHelperDB
+## LoadManagers: AddonLoader
+## X-LoadOn-Zone: Ardenweald,Maldraxxus
 #@do-not-package@
 ## Dependencies: Ace3, HereBeDragons
 #@end-do-not-package@
