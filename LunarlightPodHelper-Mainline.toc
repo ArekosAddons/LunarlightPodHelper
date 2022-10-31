@@ -1,7 +1,7 @@
 ## Interface: 100000
 ## Title: Lunarlight Pod: Helper
 ## Notes: Helps finding unlit Lunarlight Pods
-## Version: 0.2.4
+## Version: 0.2.5
 
 ## Author: Areko
 ## SavedVariables: LunarlightPodHelperDB
