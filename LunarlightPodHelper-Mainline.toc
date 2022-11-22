@@ -1,4 +1,4 @@
-## Interface: 100000
+## Interface: 100002
 ## Title: Lunarlight Pod: Helper
 ## Notes: Helps finding unlit Lunarlight Pods
 ## Version: 0.2.5
