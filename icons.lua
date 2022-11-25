@@ -35,10 +35,12 @@ local function setup_state(treasure)
     local data = ns.TREASURE_DATA[treasure]
 
     if data then
+        local mapID = ns.TREASURE_MAP[treasure] or C_Map.GetBestMapForUnit("player") or nil
         local state =  {
             activeSet = nil,
-            mapID = ns.TREASURE_MAP[treasure] or C_Map.GetBestMapForUnit("player") or nil,
+            mapID = mapID,
             iconID = ns.TREASURE_ICON[treasure] or ICON_FALLBACK,
+            distance = ns.MAP_DISTANCE[mapID or 0] or nil,
             positions = {},
         }
         treasureStates[treasure] = state
@@ -115,7 +117,7 @@ local add_pin, remove_pin, remove_all_pins do
 end
 
 local check_quests do
-    local NEAR_DISTANCE = 4.1 / 10000
+    local DEFAULT_MAX_DISTANCE = 5 / 10000
 
     function check_quests()
         local isQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
@@ -133,6 +135,8 @@ local check_quests do
                     ppX, ppY = playerPosition:GetXY()
                 end
 
+                local maxDistance = state.distance or DEFAULT_MAX_DISTANCE
+
                 for questID, data in pairs(state.positions) do
                     if isQuestFlaggedCompleted(questID) then
                         if not state.activeSet then
@@ -144,7 +148,7 @@ local check_quests do
                                 local y = ppY - posY
 
                                 local distance = (x * x + y * y)^0.5
-                                if distance <= NEAR_DISTANCE then
+                                if distance <= maxDistance then
                                     sets[setID] = distance
                                 end
                             end

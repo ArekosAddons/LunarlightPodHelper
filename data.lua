@@ -3,6 +3,11 @@ local ADDONNAME, ns = ...
 ns.ARDENWEALD_UIMAPID = 1565
 ns.MALDRAXXUS_UIMAPID = 1536
 
+ns.MAP_DISTANCE = {
+    [ns.ARDENWEALD_UIMAPID] = 10 / 10000,
+    [ns.MALDRAXXUS_UIMAPID] = 150 / 10000,
+}
+
 ns.TREASURES = {
     -- Ardenweald: Lunarpods
     LARGE = "large",
