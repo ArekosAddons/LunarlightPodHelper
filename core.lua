@@ -6,9 +6,9 @@ do-- Event handling
     local events = setmetatable({}, { __index = function(t, event)
         local callbacks = setmetatable({}, { __call = function(self, ...)
             for func in pairs(self) do
-                local success, clear = xpcall(func, CallErrorHandler, event, ...)
+                local clear = securecallfunction(func, event, ...)
 
-                if success and clear then
+                if clear then
                     self[func] = nil
                 end
             end
@@ -20,7 +20,7 @@ do-- Event handling
         end})
         rawset(t, event, callbacks)
 
-        xpcall(frame.RegisterEvent, CallErrorHandler, frame, event)
+        securecallfunction(frame.RegisterEvent, frame, event)
 
         return callbacks
     end})
@@ -53,8 +53,8 @@ do-- Callback handling
     local callbacks = setmetatable({}, { __index = function(t, callbackName)
         local v = setmetatable({}, { __call = function(self, ...)
             for func in pairs(self) do
-                local success, clear = xpcall(func, CallErrorHandler, callbackName, ...)
-                if success and clear then
+                local clear = securecallfunction(func, callbackName, ...)
+                if clear then
                     self[func] = nil
                 end
             end
