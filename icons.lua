@@ -132,6 +132,11 @@ local check_quests do
 
                 if not state.activeSet and not playerPosition then
                     playerPosition = C_Map.GetPlayerMapPosition(mapID, "player")
+                    if not playerPosition then
+                        -- loop started in loading screen
+                        unregister = true
+                        break
+                    end
                     ppX, ppY = playerPosition:GetXY()
                 end
 
@@ -178,6 +183,9 @@ local check_quests do
                                 )
                                 DEFAULT_CHAT_FRAME:AddMessage(
                                     string.format("    Quest: %d, [%d%d] = SET.?", questID, ppX*10000, ppY*10000)
+                                )
+                                DEFAULT_CHAT_FRAME:AddMessage(
+                                    string.format("mapID=%s", tostring(mapID))
                                 )
                                 --@end-debug@
                                 DEFAULT_CHAT_FRAME:AddMessage(
